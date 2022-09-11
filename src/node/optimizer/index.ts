@@ -2,6 +2,8 @@ import path from 'path'
 import { build } from 'esbuild'
 import { green } from 'picocolors'
 import { scanPlugin } from './scanPlugin'
+import { preBundlePlugin } from './preBundlePlugin'
+import { PRE_BUNDLE_DIR } from '../constants'
 
 export async function optimize(root: string) {
   // 1. 确定入口
@@ -21,4 +23,13 @@ export async function optimize(root: string) {
       .join('\n')}`
   )
   // 3. 预构建依赖
+  await build({
+    entryPoints: [...deps],
+    write: true,
+    bundle: true,
+    format: 'esm',
+    splitting: true,
+    outdir: path.resolve(root, PRE_BUNDLE_DIR),
+    plugins: [preBundlePlugin(deps)],
+  })
 }
