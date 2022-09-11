@@ -56,6 +56,7 @@ export function preBundlePlugin(deps: Set<string>): Plugin {
           const code = await fs.readFile(entryPath, 'utf-8')
           const [imports, exports] = await parse(code)
 
+          // window系统下使用相对路径
           let relativePath = normalizePath(path.relative(root, entryPath))
 
           if (
