@@ -1,52 +1,56 @@
-import connect from 'connect'
+import connect from "connect";
 // picocolors 是一个用来在命令行显示不同颜色文本的工具
-import { blue, green } from 'picocolors'
-import { optimize } from '../optimizer'
-import { resolvePlugins } from '../plugins'
-import { Plugin } from '../plugin'
-import { createPluginContainer, PluginContainer } from '../pluginContainer'
-import { indexHtmlMiddware } from './middlwares/indexHtml'
-import { transformMiddleware } from './middlwares/transform'
+import { blue, green } from "picocolors";
+import { optimize } from "../optimizer";
+import { resolvePlugins } from "../plugins";
+import { Plugin } from "../plugin";
+import { createPluginContainer, PluginContainer } from "../pluginContainer";
+import { indexHtmlMiddware } from "./middlwares/indexHtml";
+import { transformMiddleware } from "./middlwares/transform";
+import { staticMiddleware } from "./middlwares/static";
 
 export interface ServerContext {
-  root: string
-  pluginContainer: PluginContainer
-  app: connect.Server
-  plugins: Plugin[]
+  root: string;
+  pluginContainer: PluginContainer;
+  app: connect.Server;
+  plugins: Plugin[];
 }
 
 export async function startDevServer() {
-  const app = connect()
-  const root = process.cwd()
-  const startTime = Date.now()
-  const plugins = resolvePlugins()
-  const pluginContainer = createPluginContainer(plugins)
+  const app = connect();
+  const root = process.cwd();
+  const startTime = Date.now();
+  const plugins = resolvePlugins();
+  const pluginContainer = createPluginContainer(plugins);
 
   const serverContext: ServerContext = {
     root: process.cwd(),
     app,
     pluginContainer,
     plugins,
-  }
+  };
 
   for (const plugin of plugins) {
     if (plugin.configureServer) {
-      await plugin.configureServer(serverContext)
+      await plugin.configureServer(serverContext);
     }
   }
 
   // // 核心编译逻辑
-  app.use(transformMiddleware(serverContext))
+  app.use(transformMiddleware(serverContext));
 
   // 入口 HTML 资源
-  app.use(indexHtmlMiddware(serverContext))
+  app.use(indexHtmlMiddware(serverContext));
+
+  // 静态资源
+  app.use(staticMiddleware());
 
   app.listen(3000, async () => {
-    await optimize(root)
+    await optimize(root);
     console.log(
-      green('🚀 No-Bundle 服务已经成功启动!'),
+      green("🚀 No-Bundle 服务已经成功启动!"),
       `耗时: ${Date.now() - startTime}ms`
-    )
-    console.log(`> 本地访问路径: ${blue('http://localhost:3000')}`)
-  })
+    );
+    console.log(`> 本地访问路径: ${blue("http://localhost:3000")}`);
+  });
 }
