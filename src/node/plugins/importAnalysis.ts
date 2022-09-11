@@ -45,11 +45,14 @@ export function importAnalysisPlugin(): Plugin {
           console.log(modSource);
 
           const resolvedUrl = normalizePath(
-            path.join(path.dirname(id), modSource)
+            path.relative(
+              path.dirname(id),
+              path.resolve(path.dirname(id), modSource)
+            )
           );
           console.log(resolvedUrl);
 
-          ms.overwrite(modStart, modEnd, `${resolvedUrl}?import`);
+          ms.overwrite(modStart, modEnd, `./${resolvedUrl}?import`);
           continue;
         }
         // 第三方库: 路径重写到预构建产物的路径

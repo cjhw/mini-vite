@@ -57,6 +57,7 @@ export function preBundlePlugin(deps: Set<string>): Plugin {
           const [imports, exports] = await parse(code);
 
           // window系统下使用相对路径
+
           let relativePath = normalizePath(path.relative(root, entryPath));
 
           if (

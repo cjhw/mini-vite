@@ -4,7 +4,7 @@ import { isImportRequest } from "../../utils";
 import sirv from "sirv";
 
 export function staticMiddleware(): NextHandleFunction {
-  const serveFromRoot = sirv(process.cwd(), { dev: true });
+  const serveFromRoot = sirv("/", { dev: true });
   return async (req, res, next) => {
     if (!req.url) {
       return;
