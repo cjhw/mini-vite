@@ -1,16 +1,16 @@
-import cac from 'cac'
-import { startDevServer } from './server'
+import cac from "cac";
+import { startDevServer } from "./server";
 
-const cli = cac()
+const cli = cac();
 
 cli
-  .command('[root]', 'Run the development server')
-  .alias('serve')
-  .alias('dev')
+  .command("[root]", "Run the development server")
+  .alias("serve")
+  .alias("dev")
   .action(async () => {
-    await startDevServer()
-  })
+    await startDevServer();
+  });
 
-cli.help()
+cli.help();
 
-cli.parse()
+cli.parse();
