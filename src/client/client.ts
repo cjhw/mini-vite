@@ -3,6 +3,7 @@ console.log("[vite] connecting...");
 const socket = new WebSocket(`ws://localhost:__HMR_PORT__`, "vite-hmr");
 
 socket.addEventListener("message", async ({ data }) => {
+  console.log(data);
   handleMessage(JSON.parse(data)).catch(console.error);
 });
 
