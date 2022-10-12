@@ -3,7 +3,6 @@ console.log("[vite] connecting...");
 const socket = new WebSocket(`ws://localhost:__HMR_PORT__`, "vite-hmr");
 
 socket.addEventListener("message", async ({ data }) => {
-  console.log(data);
   handleMessage(JSON.parse(data)).catch(console.error);
 });
 
@@ -24,6 +23,8 @@ async function handleMessage(payload: any) {
     case "update":
       payload.updates.forEach((update: Update) => {
         if (update.type === "js-update") {
+          console.log(update);
+
           fetchUpdate(update);
         }
       });
@@ -45,6 +46,8 @@ const hotModulesMap = new Map<string, HotModule>();
 const pruneMap = new Map<string, (data: any) => void | Promise<void>>();
 
 export const createHotContext = (ownerPath: string) => {
+  console.log(ownerPath);
+
   const mod = hotModulesMap.get(ownerPath);
   if (mod) {
     mod.callbacks = [];
@@ -76,6 +79,10 @@ export const createHotContext = (ownerPath: string) => {
 
 async function fetchUpdate({ path, timestamp }: Update) {
   const mod = hotModulesMap.get(path);
+  console.log(path);
+  console.log(hotModulesMap);
+  console.log(mod);
+
   if (!mod) return;
 
   const moduleMap = new Map();
@@ -90,8 +97,12 @@ async function fetchUpdate({ path, timestamp }: Update) {
         const newMod = await import(
           path + `?t=${timestamp}${query ? `&${query}` : ""}`
         );
+        console.log(newMod);
+
         moduleMap.set(dep, newMod);
-      } catch (e) {}
+      } catch (e) {
+        console.log(e);
+      }
     })
   );
 

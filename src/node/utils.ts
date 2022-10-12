@@ -50,3 +50,18 @@ export function removeImportQuery(url: string): string {
 export function getShortName(file: string, root: string) {
   return file.startsWith(root + "/") ? path.posix.relative(root, file) : file;
 }
+
+export function getWindowShortName(file: string, root: string) {
+  const regex = /\\/g;
+  console.log(
+    root.replace("C:\\", "/").replace(regex, "/"),
+    file.replace("C:\\", "/").replace(regex, "/")
+  );
+
+  return file.startsWith(root)
+    ? path.posix.relative(
+        root.replace("C:\\", "/").replace(regex, "/"),
+        file.replace("C:\\", "/").replace(regex, "/")
+      )
+    : file;
+}
