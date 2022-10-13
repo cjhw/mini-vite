@@ -36,6 +36,7 @@ export const isJSRequest = (id: string): boolean => {
 };
 
 export function isImportRequest(url: string): boolean {
+  // 结尾是?import就认为是静态资源
   return url.endsWith("?import");
 }
 
@@ -53,10 +54,6 @@ export function getShortName(file: string, root: string) {
 
 export function getWindowShortName(file: string, root: string) {
   const regex = /\\/g;
-  console.log(
-    root.replace("C:\\", "/").replace(regex, "/"),
-    file.replace("C:\\", "/").replace(regex, "/")
-  );
 
   return file.startsWith(root)
     ? path.posix.relative(

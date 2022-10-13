@@ -19,11 +19,14 @@ export interface ServerContext {
   app: connect.Server;
   plugins: Plugin[];
   moduleGraph: ModuleGraph;
+  // WebSocket 服务端实例
   ws: { send: (data: any) => void; close: () => void };
+  // 文件变化监控
   watcher: FSWatcher;
 }
 
 export async function startDevServer() {
+  debugger;
   const app = connect();
   const root = process.cwd();
   const startTime = Date.now();

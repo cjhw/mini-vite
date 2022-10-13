@@ -47,7 +47,7 @@ export function importAnalysisPlugin(): Plugin {
         const cleanedId = cleanUrl(resolved.id);
         const mod = moduleGraph.getModuleById(cleanedId);
         let resolvedId = `${getShortName(resolved.id, serverContext.root)}`;
-        console.log(resolvedId);
+        // console.log(resolvedId);
 
         if (mod && mod.lastHMRTimestamp > 0) {
           resolvedId += "?t=" + mod.lastHMRTimestamp;
@@ -66,8 +66,8 @@ export function importAnalysisPlugin(): Plugin {
         if (modSource.endsWith(".svg")) {
           // 加上 ?import 后缀
 
-          console.log(path.dirname(id));
-          console.log(modSource);
+          // console.log(path.dirname(id));
+          // console.log(modSource);
 
           const resolvedUrl = normalizePath(
             path.relative(
@@ -75,7 +75,7 @@ export function importAnalysisPlugin(): Plugin {
               path.resolve(path.dirname(id), modSource)
             )
           );
-          console.log(resolvedUrl);
+          // console.log(resolvedUrl);
           ms.overwrite(modStart, modEnd, `./${resolvedUrl}?import`);
           continue;
         }

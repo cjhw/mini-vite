@@ -6,9 +6,13 @@ export class ModuleNode {
   url: string;
   // 资源绝对路径
   id: string | null = null;
+  // 该模块的引用方
   importers = new Set<ModuleNode>();
+  // 该模块所依赖的模块
   importedModules = new Set<ModuleNode>();
+  // 经过 transform 钩子后的编译结果
   transformResult: TransformResult | null = null;
+  // 上一次热更新的时间戳
   lastHMRTimestamp = 0;
   constructor(url: string) {
     this.url = url;
@@ -53,6 +57,7 @@ export class ModuleGraph {
     importedModules: Set<string | ModuleNode>
   ) {
     const prevImports = mod.importedModules;
+    // 绑定节点依赖关系
     for (const curImports of importedModules) {
       const dep =
         typeof curImports === "string"
