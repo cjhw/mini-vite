@@ -4,7 +4,8 @@ import logo from "./logo.svg";
 import "./App.css";
 
 function App() {
-  return <div>123</div>;
+  const [count, setCount] = useState(1234);
+  return <div>{count}</div>;
 }
 
 export default App;

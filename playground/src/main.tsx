@@ -1,8 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import App from "./App";
 import "./index.css";
-
-const App = () => <div>hello 1231</div>;
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
