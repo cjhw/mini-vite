@@ -2,7 +2,7 @@ import { readFile } from "fs-extra";
 import { CLIENT_PUBLIC_PATH } from "../constants";
 import { Plugin } from "../plugin";
 import { ServerContext } from "../server";
-import { getWindowShortName } from "../utils";
+import { getShortName, getWindowShortName, isWindows } from "../utils";
 
 export function cssPlugin(): Plugin {
   let serverContext: ServerContext;
@@ -21,10 +21,11 @@ export function cssPlugin(): Plugin {
         // 包装成 JS 模块
         const jsContent = `
 import { createHotContext as __vite__createHotContext } from "${CLIENT_PUBLIC_PATH}";
-import.meta.hot = __vite__createHotContext("/${getWindowShortName(
-          id,
-          serverContext.root
-        )}");
+import.meta.hot = __vite__createHotContext("/${
+          isWindows
+            ? getWindowShortName(id, serverContext.root)
+            : getShortName(id, serverContext.root)
+        }");
 import { updateStyle, removeStyle } from "${CLIENT_PUBLIC_PATH}"
   
 const id = '${id}';
@@ -32,8 +33,7 @@ const css = '${code.replace(/\r\n/g, "")}';
 
 updateStyle(id, css);
 import.meta.hot.accept();
-export default css;
-import.meta.hot.prune(() => removeStyle(id));`.trim();
+export default css;`.trim();
         return {
           code: jsContent,
         };

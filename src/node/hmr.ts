@@ -1,6 +1,6 @@
 import { ServerContext } from "./server/index";
 import { blue, green } from "picocolors";
-import { getWindowShortName } from "./utils";
+import { getWindowShortName, isWindows, getShortName } from "./utils";
 
 export function bindingHMREvents(serverContext: ServerContext) {
   const { watcher, ws, root } = serverContext;
@@ -17,8 +17,16 @@ export function bindingHMREvents(serverContext: ServerContext) {
         {
           type: "js-update",
           timestamp: Date.now(),
-          path: "/" + getWindowShortName(file, root),
-          acceptedPath: "/" + getWindowShortName(file, root),
+          path:
+            "/" +
+            (isWindows
+              ? getWindowShortName(file, root)
+              : getShortName(file, root)),
+          acceptedPath:
+            "/" +
+            (isWindows
+              ? getWindowShortName(file, root)
+              : getShortName(file, root)),
         },
       ],
     });
