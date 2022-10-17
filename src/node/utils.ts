@@ -53,12 +53,12 @@ export function getShortName(file: string, root: string) {
 }
 
 export function getWindowShortName(file: string, root: string) {
-  const regex = /\\/g;
-
   return file.startsWith(root)
-    ? path.posix.relative(
-        root.replace("C:\\", "/").replace(regex, "/"),
-        file.replace("C:\\", "/").replace(regex, "/")
-      )
+    ? path.posix.relative(slash(root), slash(file))
     : file;
+}
+
+export function resolveWindowPath(url: string) {
+  const normalurl = slash(url);
+  return path.posix.relative(slash(process.cwd()), normalurl);
 }

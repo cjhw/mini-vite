@@ -29,7 +29,7 @@ async function handleMessage(payload: any) {
         if (update.type === "js-update") {
           console.log(update);
 
-          fetchUpdate(update);
+          queueUpdate(fetchUpdate(update));
         }
       });
       break;
@@ -80,6 +80,22 @@ export const createHotContext = (ownerPath: string) => {
     },
   };
 };
+
+let pending = false;
+let queued: Promise<(() => void) | undefined>[] = [];
+
+// 批量任务处理，不与具体的热更新行为挂钩，主要起任务调度作用
+async function queueUpdate(p: Promise<(() => void) | undefined>) {
+  queued.push(p);
+  if (!pending) {
+    pending = true;
+    await Promise.resolve();
+    pending = false;
+    const loading = [...queued];
+    queued = [];
+    (await Promise.all(loading)).forEach((fn) => fn && fn());
+  }
+}
 
 async function fetchUpdate({ path, timestamp }: Update) {
   const mod = hotModulesMap.get(path);

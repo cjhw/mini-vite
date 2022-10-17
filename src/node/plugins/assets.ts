@@ -1,5 +1,10 @@
 import { Plugin } from "../plugin";
-import { cleanUrl, normalizePath, removeImportQuery } from "../utils";
+import {
+  cleanUrl,
+  normalizePath,
+  removeImportQuery,
+  isWindows,
+} from "../utils";
 
 export function assetPlugin(): Plugin {
   return {
@@ -11,7 +16,9 @@ export function assetPlugin(): Plugin {
       if (cleanedId.endsWith(".svg")) {
         return {
           // 包装成一个 JS 模块  window系统要把磁盘标识换掉
-          code: `export default "${cleanedId.replace("C:", "")}"`,
+          code: isWindows
+            ? `export default "${cleanedId.replace(/\D\:/g, "")}"`
+            : `export default "${cleanedId}"`,
         };
       }
     },

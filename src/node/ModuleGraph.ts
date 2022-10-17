@@ -57,7 +57,6 @@ export class ModuleGraph {
     importedModules: Set<string | ModuleNode>
   ) {
     const prevImports = mod.importedModules;
-    // 绑定节点依赖关系
     for (const curImports of importedModules) {
       const dep =
         typeof curImports === "string"

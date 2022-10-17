@@ -4,7 +4,7 @@ import logo from "./logo.svg";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(1234);
+  const [count, setCount] = useState(55556);
   return (
     <div>
       <div>{count}</div>

@@ -41,16 +41,17 @@ export function importAnalysisPlugin(): Plugin {
           id,
           importer
         );
+
         if (!resolved) {
           return;
         }
         const cleanedId = cleanUrl(resolved.id);
         const mod = moduleGraph.getModuleById(cleanedId);
-        let resolvedId = `${getShortName(resolved.id, serverContext.root)}`;
-        // console.log(resolvedId);
+
+        let resolvedId = `/${getShortName(resolved.id, serverContext.root)}`;
 
         if (mod && mod.lastHMRTimestamp > 0) {
-          resolvedId += "?t=" + mod.lastHMRTimestamp;
+          // resolvedId += "?t=" + mod.lastHMRTimestamp;
         }
         return resolvedId;
       };
@@ -61,7 +62,7 @@ export function importAnalysisPlugin(): Plugin {
         // 举例说明: const str = `import React from 'react'`
         // str.slice(s, e) => 'react'
         const { s: modStart, e: modEnd, n: modSource } = importInfo;
-        if (!modSource) continue;
+        if (!modSource || isInternalRequest(modSource)) continue;
         // 静态资源
         if (modSource.endsWith(".svg")) {
           // 加上 ?import 后缀
@@ -111,6 +112,9 @@ export function importAnalysisPlugin(): Plugin {
             )});`
         );
       }
+
+      //会报错
+      moduleGraph.updateModuleInfo(curMod, importedModules);
 
       return {
         code: ms.toString(),

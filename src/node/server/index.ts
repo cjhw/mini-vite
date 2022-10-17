@@ -29,6 +29,7 @@ export async function startDevServer() {
   debugger;
   const app = connect();
   const root = process.cwd();
+
   const startTime = Date.now();
   const plugins = resolvePlugins();
   const moduleGraph = new ModuleGraph((url) => pluginContainer.resolveId(url));
