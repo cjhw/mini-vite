@@ -9,6 +9,13 @@ function App() {
     <div>
       <div>{count}</div>
       {/* <img src={logo} alt="" /> */}
+      <button
+        onClick={() => {
+          setCount((num: number) => num + 1);
+        }}
+      >
+        +1
+      </button>
     </div>
   );
 }
