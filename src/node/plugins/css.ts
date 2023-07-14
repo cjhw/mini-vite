@@ -29,7 +29,7 @@ import.meta.hot = __vite__createHotContext("/${
 import { updateStyle, removeStyle } from "${CLIENT_PUBLIC_PATH}"
   
 const id = '${id}';
-const css = '${code.replace(/\r\n/g, "")}';
+const css = \`${code.replace(/\r\n/g, "")}\`;
 
 updateStyle(id, css);
 import.meta.hot.accept();

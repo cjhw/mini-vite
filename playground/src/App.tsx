@@ -8,7 +8,7 @@ function App() {
   return (
     <div>
       <div>{count}</div>
-      {/* <img src={logo} alt="" /> */}
+      <img src={logo} alt="" />
       <button
         onClick={() => {
           setCount((num: number) => num + 1);
