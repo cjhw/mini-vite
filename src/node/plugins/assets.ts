@@ -17,7 +17,7 @@ export function assetPlugin(): Plugin {
         return {
           // 包装成一个 JS 模块  window系统要把磁盘标识换掉
           code: isWindows
-            ? `export default "${cleanedId.replace(/\D\:/g, "")}"`
+            ? `export default "${cleanedId.replace(/[A-Z]\:/g, "")}"`
             : `export default "${cleanedId}"`,
         };
       }
